@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+
+        <title>Code Player</title>
+
+        <script type="text/javascript" src="jquery.min.js"></script>
+
+        <script src="jquery-ui/jquery-ui.js"></script>
+
+        <link href="jquery-ui/jquery-ui.css" rel="stylesheet">
+
+        <style>
+
+            body {
+
+                padding: 0px;
+                margin: 0px;
+
+            }
+
+            #topBar {
+
+                position: absolute;
+                height: 50px;
+                width: 100%;
+                background-color: lightgrey;
+                margin: 0 auto;
+                font-family: sans-serif;
+
+            }
+
+            .title {
+
+                position:absolute;
+                font-size: 150%;
+                font-family: 'Courier New', Courier, monospace;
+                font-weight: bolder;
+                margin-top: 10px;
+
+            }
+
+            .barButton {
+
+                float: left;
+                height: 30px;
+                font-size: 17px;
+
+            }
+
+            #clickable {
+
+                position:absolute;
+                margin-top: 10px;
+                padding-left:41%;
+
+            }
+
+            .active {
+
+                background-color: lightskyblue;
+                border-width: thin;
+                border-radius: 5%;
+            }
+
+
+            textarea {
+
+                padding-top: 50px;
+                resize: none;
+                border-top: none;
+                border-color: grey;
+
+            }
+
+            iframe {
+
+                padding-top: 50px;
+                border:none;
+
+            }
+
+            .panel {
+
+                float:left;
+                width: 50%;
+                border-left: none;
+
+            }
+
+            .hidden {
+
+                display: none;
+
+            }
+
+        </style>
+
+    </head>
+
+
+    <body>
+
+        <div id="topBar"> 
+
+            <div class="title">CodePlayer</div>
+
+            <div id="clickable">
+
+                <button class="barButton active" id="html">HTML</buton>
+
+                <button class="barButton" id="css">CSS</button>
+
+                <button class="barButton" id="javascript">Javascript</button>
+
+                <button class="barButton active" id="output">Output</button>
+
+            </div>
+
+        </div>
+
+        <div id="bodyContainer">
+
+            <textarea id="htmlPanel" class="panel"><p id = "para">Hello World</p></textarea>
+
+            <textarea id="cssPanel" class="panel hidden">p {color: red;}</textarea>
+
+            <textarea id="javascriptPanel" class="panel hidden">document.getElementById("para").innerHTML = "Hello Cori";</textarea>
+
+            <iframe id="outputPanel" class="panel"></iframe>
+
+
+        </div>
+        <script type="text/javascript">
+
+            function updateOutput() {
+
+                $("iframe").contents().find("html").html("<html><head><style type='text/css'>" 
+                    + $("#cssPanel").val() + "</style></head><body>" 
+                        + $("#htmlPanel").val() + "</body></html>");
+
+                document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+
+            }
+
+            $(".barButton").click(function()  {
+
+                $(this).toggleClass("active");
+
+                var panelId = $(this).attr("id") + "Panel";
+
+                $("#" + panelId).toggleClass("hidden");
+
+                var numberOfActivePanels = 4 - $(".hidden").length;
+        
+                $(".panel").width(($(window).width() / numberOfActivePanels) - 10);
+
+
+            });
+
+            $(".panel").height($(window).height()-$("#topBar").height());
+        
+            $(".panel").width(($(window).width() / 2) - 10);
+
+            updateOutput();
+
+            $("textarea").on("change keyup paste", function() {
+
+                updateOutput();
+                
+            });
+
+        </script>
+
+
+    </body>
+
+
+
+</html>
